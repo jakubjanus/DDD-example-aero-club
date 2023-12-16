@@ -13,7 +13,7 @@ RSpec.describe 'Renting an aircraft' do
     end
 
     context 'given available glider' do
-      let(:aircraft) { Aircraft.new(type: :glider) }
+      let(:aircraft) { Aircraft.new(type: :glider, registration_number: 'SP-1234') }
 
       it 'is possible to reserve glider for future date' do
         planning_day.reserve(aircraft, pilot)
@@ -22,15 +22,17 @@ RSpec.describe 'Renting an aircraft' do
       end
 
       context 'given a glider is already reserved for a date' do
-        it 'is not possible to reserve a glider' do
-
+        let(:other_pilot) do
+          Pilot.new.tap { |pilot| pilot.add_license(License.new(type: :spl)) }
         end
-      end
-    end
 
-    context 'given glider which is unavailable' do
-      it 'is not possible to reserve glider' do
+        before do
+          planning_day.reserve(aircraft, other_pilot)
+        end
 
+        it 'is not possible to reserve a glider' do
+          expect { planning_day.reserve(aircraft, pilot) }.to raise_error PlanningDay::AlreadyReserved
+        end
       end
     end
   end
