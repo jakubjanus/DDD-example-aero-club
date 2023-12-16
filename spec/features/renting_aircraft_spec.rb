@@ -4,7 +4,7 @@ RSpec.describe 'Renting an aircraft' do
   let(:day) { Date.parse('2023-06-01') }
   subject(:planning_day) { PlanningDay.new(day) }
 
-  context 'given a pilot with SPL licence' do
+  context 'given a pilot with SPL license' do
     let(:spl_license) { License.new(type: :spl) }
     let(:pilot) { Pilot.new }
 
@@ -34,6 +34,15 @@ RSpec.describe 'Renting an aircraft' do
           expect { planning_day.reserve(aircraft, pilot) }.to raise_error PlanningDay::AlreadyReserved
         end
       end
+    end
+  end
+
+  context 'given a pilot without active license' do
+    let(:pilot) { Pilot.new }
+    let(:aircraft) { Aircraft.new(type: :glider, registration_number: 'SP-1234') }
+
+    it "can't reserve an aircraft" do
+      expect { planning_day.reserve(aircraft, pilot) }.to raise_error PlanningDay::InsufficientLicense
     end
   end
 end

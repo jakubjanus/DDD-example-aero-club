@@ -6,7 +6,7 @@ class Aircraft
     @registration_number = registration_number
   end
 
-  attr_reader :registration_number
+  attr_reader :registration_number, :type
 
   def eql?(other)
     registration_number == other.registration_number

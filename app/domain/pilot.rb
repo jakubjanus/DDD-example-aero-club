@@ -11,4 +11,8 @@ class Pilot
   def add_license(license)
     @licenses.push(license)
   end
+
+  def can_fly?(aircraft)
+    @licenses.any? { |license| license.sufficient_for?(aircraft) }
+  end
 end
