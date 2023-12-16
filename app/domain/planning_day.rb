@@ -3,13 +3,12 @@
 class PlanningDay
   def initialize(day)
     @day = day
+    @reservations = []
   end
 
   def reserve(aircraft, pilot)
-    true
+    @reservations.push(Reservation.new(aircraft: aircraft, pilot: pilot))
   end
 
-  def reservations
-    []
-  end
+  attr_reader :reservations
 end
