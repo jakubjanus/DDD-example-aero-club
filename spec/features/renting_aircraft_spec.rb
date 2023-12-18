@@ -18,7 +18,7 @@ RSpec.describe 'Renting an aircraft' do
       it 'is possible to reserve glider for future date' do
         planning_day.reserve(aircraft, pilot)
 
-        expect(planning_day.reservations.size).to eq 1
+        expect(planning_day.active_reservations.size).to eq 1
       end
 
       context 'given a glider is already reserved for a date' do
@@ -42,6 +42,20 @@ RSpec.describe 'Renting an aircraft' do
 
         it 'is not possible to reserve another aircraft' do
           expect { planning_day.reserve(aircraft, pilot)}.to raise_error Planning::PlanningDay::OtherAircraftAlreadyReserved
+        end
+
+        it 'reservation can be canceled' do
+          reservation = planning_day.active_reservations.first
+          planning_day.cancel(reservation)
+
+          expect(planning_day.active_reservations).to be_empty
+        end
+
+        it 'cannot cancel reservation from other planning day' do
+          other_planning_day = Planning::PlanningDay.new(Date.parse('2023-06-02'))
+          other_reservation = other_planning_day.reserve(aircraft, pilot)
+
+          expect { planning_day.cancel(other_reservation) }.to raise_error Planning::PlanningDay::NoSuchReservation
         end
       end
     end
