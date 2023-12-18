@@ -8,11 +8,17 @@ class Pilot
     @licenses = []
   end
 
+  attr_reader :id
+
   def add_license(license)
     @licenses.push(license)
   end
 
   def can_fly?(aircraft)
     @licenses.any? { |license| license.sufficient_for?(aircraft) }
+  end
+
+  def eql?(other)
+    id == other.id
   end
 end

@@ -34,6 +34,16 @@ RSpec.describe 'Renting an aircraft' do
           expect { planning_day.reserve(aircraft, pilot) }.to raise_error PlanningDay::AlreadyReserved
         end
       end
+
+      context 'given pilot has already reserved other aircraft' do
+        let(:other_aircraft) { Aircraft.new(type: :glider, registration_number: 'SP-2345') }
+
+        before { planning_day.reserve(other_aircraft, pilot) }
+
+        it 'is not possible to reserve another aircraft' do
+          expect { planning_day.reserve(aircraft, pilot)}.to raise_error PlanningDay::OtherAircraftAlreadyReserved
+        end
+      end
     end
   end
 
