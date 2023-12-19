@@ -9,7 +9,7 @@ RSpec.describe 'Renting an aircraft' do
   let(:pilot) { Planning::Pilot.new }
 
   context 'given a pilot with SPL license' do
-    let(:spl_license) { Planning::License.new(type: :spl) }
+    let(:spl_license) { Planning::License.create(:spl) }
 
     before do
       pilot.add_license(spl_license)
@@ -24,7 +24,7 @@ RSpec.describe 'Renting an aircraft' do
 
       context 'given a glider is already reserved for a date' do
         let(:other_pilot) do
-          Planning::Pilot.new.tap { |pilot| pilot.add_license(Planning::License.new(type: :spl)) }
+          Planning::Pilot.new.tap { |pilot| pilot.add_license(Planning::License.create(:spl)) }
         end
 
         before do
@@ -73,7 +73,7 @@ RSpec.describe 'Renting an aircraft' do
   end
 
   context 'given a pilot with active PPL license' do
-    let(:ppl_license) { Planning::License.new(type: :ppl) }
+    let(:ppl_license) { Planning::License.create(:ppl) }
 
     before do
       pilot.add_license(ppl_license)
