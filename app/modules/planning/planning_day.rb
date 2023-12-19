@@ -7,9 +7,9 @@ module Planning
     InsufficientLicense = Class.new(StandardError)
     NoSuchReservation = Class.new(StandardError)
 
-    def initialize(day)
+    def initialize(day, reservations: [])
       @day = day
-      @reservations = []
+      @reservations = reservations
     end
 
     def reserve(aircraft, pilot)

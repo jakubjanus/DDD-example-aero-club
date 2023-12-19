@@ -4,11 +4,11 @@ require 'securerandom'
 
 module Planning
   class Reservation
-    def initialize(aircraft:, pilot:, reservation_number: SecureRandom.alphanumeric)
+    def initialize(aircraft:, pilot:, reservation_number: SecureRandom.alphanumeric, canceled: false)
       @aircraft = aircraft
       @pilot = pilot
       @reservation_number = reservation_number
-      @canceled = false
+      @canceled = canceled
     end
 
     def eql?(other)

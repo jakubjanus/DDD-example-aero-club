@@ -4,9 +4,9 @@ require 'securerandom'
 
 module Planning
   class Pilot
-    def initialize(pilot_id: SecureRandom.uuid)
+    def initialize(pilot_id: SecureRandom.uuid, licenses: [])
       @id = pilot_id
-      @licenses = []
+      @licenses = licenses
     end
 
     attr_reader :id
