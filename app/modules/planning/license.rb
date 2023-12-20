@@ -4,9 +4,9 @@ module Planning
   class License
     class << self
       def create(type)
-        if type == :spl
+        if type.to_sym == :spl
           Spl.new
-        elsif type == :ppl
+        elsif type.to_sym == :ppl
           Ppl.new
         else
           raise "Unknown type: #{type}"
@@ -18,15 +18,32 @@ module Planning
       raise 'Not implemented'
     end
 
+    def type
+      raise 'Not implemented'
+    end
+
+    def eql?(other)
+      type == other.type
+    end
+    alias :== eql?
+
     class Spl < License
       def sufficient_for?(aircraft)
         aircraft.type == :glider
+      end
+
+      def type
+        :spl
       end
     end
 
     class Ppl < License
       def sufficient_for?(aircraft)
         aircraft.type == :airplane
+      end
+
+      def type
+        :ppl
       end
     end
   end

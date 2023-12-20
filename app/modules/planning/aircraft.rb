@@ -12,5 +12,6 @@ module Planning
     def eql?(other)
       registration_number == other.registration_number
     end
+    alias :== eql?
   end
 end

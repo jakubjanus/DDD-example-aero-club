@@ -33,6 +33,8 @@ module Planning
       reservations.select(&:active?)
     end
 
+    attr_reader :day
+
     private
 
     attr_reader :reservations

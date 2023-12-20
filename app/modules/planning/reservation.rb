@@ -14,6 +14,7 @@ module Planning
     def eql?(other)
       reservation_number == other.reservation_number
     end
+    alias :== eql?
 
     def cancel
       @canceled = true

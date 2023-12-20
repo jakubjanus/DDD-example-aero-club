@@ -22,5 +22,6 @@ module Planning
     def eql?(other)
       id == other.id
     end
+    alias :== eql?
   end
 end
