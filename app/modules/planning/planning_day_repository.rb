@@ -11,17 +11,41 @@ module Planning
 
     def store(planning_day)
       PlanningDayRecord.transaction do
-        planning_day_record = PlanningDayRecord.create!(day: planning_day.day)
+        record = PlanningDayRecord.find_by(day: planning_day.day)
 
-        planning_day.send(:reservations).each do |reservation|
-          reservation_record = ReservationRecord.from_entity(reservation)
-          reservation_record.planning_day_record = planning_day_record
-          reservation_record.save!
-
-          PilotRecord.from_entity(reservation.pilot).tap { _1.reservation_record = reservation_record }.save!
-          AircraftRecord.from_entity(reservation.aircraft).tap { _1.reservation_record = reservation_record }.save!
-        end
+        record.present? ? update_record(planning_day, record) : create_record(planning_day)
       end
+    end
+
+    private
+
+    def create_record(planning_day)
+      planning_day_record = PlanningDayRecord.create!(day: planning_day.day)
+
+      planning_day.send(:reservations).each do |reservation|
+        reservation_record = ReservationRecord.from_entity(reservation)
+        reservation_record.planning_day_record = planning_day_record
+        reservation_record.save!
+      end
+    end
+
+    def update_record(planning_day, planning_day_record)
+      reservation_records = planning_day.send(:reservations).map do |reservation|
+        reservation_record = planning_day_record.reservation_records
+                                                .find { _1.reservation_number == reservation.reservation_number }
+        if reservation_record
+          reservation_record.assign_from_entity(reservation)
+          reservation_record.pilot_record.save!
+          reservation_record.aircraft_record.save!
+        end
+
+        reservation_record ||= ReservationRecord.from_entity(reservation)
+
+        reservation_record
+      end
+
+      planning_day_record.reservation_records = reservation_records
+      planning_day_record.save!
     end
 
     class PlanningDayRecord < ApplicationRecord
@@ -50,9 +74,20 @@ module Planning
         def from_entity(reservation)
           new(
             reservation_number: reservation.reservation_number,
-            canceled: reservation.canceled?
+            canceled: reservation.canceled?,
+            pilot_record: PilotRecord.from_entity(reservation.pilot),
+            aircraft_record: AircraftRecord.from_entity(reservation.aircraft)
           )
         end
+      end
+
+      def assign_from_entity(reservation)
+        assign_attributes(
+          reservation_number: reservation.reservation_number,
+          canceled: reservation.canceled?
+        )
+        pilot_record.assign_from_entity(reservation.pilot)
+        aircraft_record.assign_from_entity(reservation.aircraft)
       end
 
       def to_entity
@@ -86,6 +121,13 @@ module Planning
           )
         end
       end
+
+      def assign_from_entity(pilot)
+        assign_attributes(
+          licenses: pilot.instance_variable_get('@licenses').map { { 'type' => _1.type } },
+          pilot_id: pilot.id
+        )
+      end
     end
 
     class AircraftRecord < ApplicationRecord
@@ -103,6 +145,13 @@ module Planning
             registration_number: aircraft.registration_number
           )
         end
+      end
+
+      def assign_from_entity(aircraft)
+        assign_attributes(
+          type: aircraft.type,
+          registration_number: aircraft.registration_number
+        )
       end
     end
   end
