@@ -58,6 +58,15 @@ RSpec.describe 'Renting an aircraft' do
 
           expect { planning_day.cancel(other_reservation) }.to raise_error Planning::PlanningDay::NoSuchReservation
         end
+
+        it 'it is possible to cancel and reserve other aircraft' do
+          reservation = planning_day.active_reservations.first
+          planning_day.cancel(reservation)
+          planning_day.reserve(other_aircraft, pilot)
+
+          expect(planning_day.active_reservations.size).to eq 1
+          expect(planning_day.active_reservations.first.aircraft).to eq other_aircraft
+        end
       end
     end
 

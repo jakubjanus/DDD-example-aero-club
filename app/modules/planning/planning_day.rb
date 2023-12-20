@@ -13,8 +13,8 @@ module Planning
     end
 
     def reserve(aircraft, pilot)
-      raise AlreadyReserved if reservations.map(&:aircraft).include?(aircraft)
-      raise OtherAircraftAlreadyReserved if reservations.map(&:pilot).include?(pilot)
+      raise AlreadyReserved if active_reservations.map(&:aircraft).include?(aircraft)
+      raise OtherAircraftAlreadyReserved if active_reservations.map(&:pilot).include?(pilot)
       raise InsufficientLicense unless pilot.can_fly?(aircraft)
 
       reservation = Reservation.new(aircraft: aircraft, pilot: pilot)
