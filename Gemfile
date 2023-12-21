@@ -12,6 +12,7 @@ gem "puma", "~> 5.0"
 
 gem "bootsnap", require: false
 gem "cssbundling-rails"
+gem 'dry-validation'
 gem "jsbundling-rails"
 gem "stimulus-rails"
 gem "turbo-rails"

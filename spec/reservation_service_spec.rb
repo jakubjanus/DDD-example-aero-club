@@ -9,8 +9,8 @@ RSpec.describe Planning::Application::ReservationService do
     let(:params) do
       {
         date: '2023-12-01',
-        pilot: { licenses: [:spl] },
-        aircraft: { type: :glider, registration_number: 'SP-2222' }
+        pilot: { licenses: ['spl'] },
+        aircraft: { type: 'glider', registration_number: 'SP-2222' }
       }
     end
 
@@ -22,13 +22,21 @@ RSpec.describe Planning::Application::ReservationService do
       expect(planning_day.active_reservations.size).to eq 1
     end
 
+    describe 'params validation' do
+      it 'fails if date is missing' do
+        expect do
+          reservation_service.make_reservation(params.without(:date))
+        end.to raise_error Planning::Application::ReservationService::ValidationError
+      end
+    end
+
     context 'when there already is other reservation for the day' do
       before do
         reservation_service.make_reservation(
           {
             date: '2023-12-01',
-            pilot: { licenses: [:spl] },
-            aircraft: { type: :glider, registration_number: 'SP-3333' }
+            pilot: { licenses: ['spl'] },
+            aircraft: { type: 'glider', registration_number: 'SP-3333' }
           }
         )
       end

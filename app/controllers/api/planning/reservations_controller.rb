@@ -15,6 +15,8 @@ module Api
         render json: { reservation_number: reservation.reservation_number }
       rescue ::Planning::PlanningDay::DomainError => e
         render json: { error_type: e.class, error_message: e.message }, status: 422
+      rescue ::Planning::Application::ReservationService::ValidationError => e
+        render json: { error_type: e.class, error_message: e.message }, status: 400
       end
 
       private
