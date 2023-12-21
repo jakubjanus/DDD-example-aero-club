@@ -2,10 +2,11 @@
 
 module Planning
   class PlanningDay
-    AlreadyReserved = Class.new(StandardError)
-    OtherAircraftAlreadyReserved = Class.new(StandardError)
-    InsufficientLicense = Class.new(StandardError)
-    NoSuchReservation = Class.new(StandardError)
+    DomainError = Class.new(StandardError)
+    AlreadyReserved = Class.new(DomainError)
+    OtherAircraftAlreadyReserved = Class.new(DomainError)
+    InsufficientLicense = Class.new(DomainError)
+    NoSuchReservation = Class.new(DomainError)
 
     def initialize(day, reservations: [])
       @day = day
