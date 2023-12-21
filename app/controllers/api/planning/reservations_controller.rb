@@ -10,18 +10,7 @@ module Api
       end
 
       def create
-        repository = ::Planning::PlanningDayRepository.new
-        day = Date.parse(reservation_params['date'])
-        planning_day = repository.find_for_day(day) || ::Planning::PlanningDay.new(day)
-        aircraft = ::Planning::Aircraft.new(
-          type: reservation_params['aircraft']['type'].to_sym,
-          registration_number: reservation_params['aircraft']['registration_number']
-        )
-        pilot = ::Planning::Pilot.new(
-          licenses: reservation_params['pilot']['licenses'].map { ::Planning::License.create(_1) }
-        )
-        reservation = planning_day.reserve(aircraft, pilot)
-        repository.store(planning_day)
+        reservation = reservation_service.make_reservation(reservation_params)
 
         render json: { reservation_number: reservation.reservation_number }
       rescue ::Planning::PlanningDay::DomainError => e
@@ -31,7 +20,17 @@ module Api
       private
 
       def reservation_params
-        params[:reservation].as_json
+        params
+          .require(:reservation)
+          .permit(:date, pilot: [{licenses: []}, :pilot_id], aircraft: [:type, :registration_number]).to_h
+      end
+
+      def reservation_service
+        ::Planning::Application::ReservationService.new(planning_day_repository: planning_day_repository)
+      end
+
+      def planning_day_repository
+        ::Planning::PlanningDayRepository.new
       end
 
     end
