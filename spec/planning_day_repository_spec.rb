@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Renting an aircraft' do
+RSpec.describe 'PlanningDayRepository' do
   subject(:repository) { Planning::PlanningDayRepository.new }
 
   let(:day) { Date.parse('2023-12-01') }
