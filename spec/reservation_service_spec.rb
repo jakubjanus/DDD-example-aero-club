@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Planning::Application::ReservationService do
   subject(:reservation_service) { described_class.new(planning_day_repository: repository) }
 
-  let(:repository) { Planning::PlanningDayRepository.new }
+  let(:repository) { Planning::Repositories::PlanningDayRepositories::InMemory.new }
 
   describe 'making reservation' do
     let(:params) do

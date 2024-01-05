@@ -4,7 +4,7 @@ module Api
   module Planning
     class ReservationsController < ApiController
       def index
-        reservations = ::Planning::PlanningDayRepository::ReservationRecord.all
+        reservations = ::Planning::Repositories::PlanningDayRepositories::Database::ReservationRecord.all
 
         render json: { reservations: reservations.map(&:as_json) }
       end
@@ -32,7 +32,7 @@ module Api
       end
 
       def planning_day_repository
-        ::Planning::PlanningDayRepository.new
+        ::Planning::Repositories::PlanningDayRepositories::Database.new
       end
 
     end
