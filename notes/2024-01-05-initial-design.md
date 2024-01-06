@@ -60,7 +60,7 @@ to hold information about all aircraft reservations on given day. Sufficient des
 of reservations (couple of aircraft and pilot entities) for given day. I named this aggregate PlanningDay and here it's
 visualisation:
 
-![](../app/modules/planning/docs/planning module.png)
+![PlanningDay aggregate](imgs/planning_day_aggregate.png)
 
 `PlanningDay` - aggregate root which represents given day and holds information about all reservations for given day
 
