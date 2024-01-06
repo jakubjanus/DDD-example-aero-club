@@ -1,24 +1,12 @@
-# README
+# Goal
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The goal of this app is to practise Domain-Driven Design(DDD) by implementing simple Rails application.
 
-Things you may want to cover:
+I treat this project as a place where I can experiment and practice different DDD approaches and patterns.
+Most of the patterns are from Eric Evans blue book (Domain-Driven Design, tackling Complexity in the Heart of Software).
 
-* Ruby version
+While working on the project I'm documenting my thoughts and design decisions in `/notes` dir.
 
-* System dependencies
+# Domain
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Business domain of the project is aero club management.
