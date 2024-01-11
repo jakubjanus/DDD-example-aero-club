@@ -4,6 +4,6 @@ Planning module is responsible for managing reservations of aircraft for given f
 
 # Diagram
 
-![](docs/planning module.png)
+![](docs/planning_module.png)
 
 # Features
